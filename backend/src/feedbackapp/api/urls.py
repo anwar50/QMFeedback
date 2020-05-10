@@ -1,21 +1,6 @@
-
-# from modules.api.views import (
-#     ModuleViewSet,
-#     QuestionViewSet,
-#     # AnswerViewSet
-# )
-# from rest_framework.routers import DefaultRouter
-
-# router = DefaultRouter()
-# router.register(r'', ModuleViewSet, base_name='modules')
-# urlpatterns = router.urls
-
-# questionrouter = DefaultRouter()
-# questionrouter.register(r'', QuestionViewSet, base_name='questions')
-# urlpatterns = questionrouter.urls
-
-
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetDoneView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth import views as auth_views
 from .views import (
     ModuleListView, 
     ModuleDetailView, 
@@ -117,5 +102,9 @@ urlpatterns = [
     path('processnltk/<test>/<grade>/<mark>/<correct>/<incorrect>/<effectiveness>', ProcessData.as_view(), name="processnltk"),
         ##generated Feedback category
     path('generatedFeedback', FeedbackListView.as_view(), name="generatefeedback"),
+    path('password-reset/', auth_views.PasswordResetView.as_view(), name="password_reset"),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
     
 ]

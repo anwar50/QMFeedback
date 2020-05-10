@@ -12,7 +12,6 @@ from .models import AnswersBank
 from .models import ImprovementFeedback
 
 # Register your models here.
-# admin.site.register(Question)
 admin.site.register(Module)
 admin.site.register(Test)
 admin.site.register(FeedbackBank)

@@ -35,28 +35,23 @@ class UserTestSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeacherProfile
-        # extra_kwargs = {'id': {'read_only': False, 'required': False}}
         fields = '__all__'
 
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
-        # extra_kwargs = {'id': {'read_only': False, 'required': False}}
         fields = '__all__'
 class UserFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        # extra_kwargs = {'id': {'read_only': False, 'required': False}}
         fields = ('feedback', 'test')
 class FeedbackGeneratorSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackBankTwo
-        # extra_kwargs = {'id': {'read_only': False, 'required': False}}
         fields = ('feedback_bank', 'category', 'percentage')
 class SavedTestFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavedFeedback
-        # extra_kwargs = {'id': {'read_only': False, 'required': False}}
         fields = '__all__'
 class SavedImprovementFeedbackSerializer(serializers.ModelSerializer):
     class Meta:

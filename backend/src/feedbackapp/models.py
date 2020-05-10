@@ -32,7 +32,7 @@ class Test(models.Model):
     num_subquestions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     description = models.CharField(max_length=70, default="None")
     created_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-        #Multiple choice questions (MCQs) OR True/False questions OR Short Answer Questions OR SKELETON QUESTIONS!
+        #Multiple choice questions (MCQs) OR True/False questions OR Short Answer Questions OR Skeleton questions!
     questiontype = models.CharField(max_length=50, default="None", editable=True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     class Meta:
@@ -53,16 +53,11 @@ class Grade(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     def __str__(self):
         return str(self.grade)
-    #a profile class defines if the user is a student or teacher
 class FeedbackBank(models.Model):
-    #type_of_feedback = models.CharField(max_length=50, default="", editable=True)
     feedback_bank = models.CharField(max_length=500, default="", editable=True)
     category = models.CharField(max_length=10, default="", editable=True)
-    #percentage = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    # test = models.ForeignKey(Test, on_delete=models.CASCADE)
     def __str__(self):
         return self.feedback_bank
-        #teacher can set feedback from a feedback bank or add new feedback! EVERY NEW FEEDBACK SET WILL BE SAVED IN A BANK TO BE REUSED LATER!
 class FeedbackBankTwo(models.Model):
     feedback_bank = models.CharField(max_length=100000, default="", editable=True)
     category = models.CharField(max_length=10, default="", editable=True)
@@ -74,6 +69,7 @@ class Feedback(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     def __str__(self):
         return self.feedback
+    '''The saved feedbacks are stored in this model'''
 class SavedFeedback(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE)
@@ -83,6 +79,7 @@ class SavedFeedback(models.Model):
     created_by = models.CharField(max_length=100, default="None", editable=True)
     def __str__(self):
         return str(self.feedback + " " + self.user)
+    '''This model stores the information about the improvement feedback'''
 class ImprovementFeedback(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     area_of_improvement = models.CharField(max_length=70, default="None")
@@ -95,6 +92,7 @@ class PreProcessedData(models.Model):
     rating = models.IntegerField(default=0, null=True)
     def __str__(self):
         return str(self.processed_feedback)
+    '''Answer bank model stores the information about the test breakdown'''
 class AnswersBank(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     total_mark_for_question = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
