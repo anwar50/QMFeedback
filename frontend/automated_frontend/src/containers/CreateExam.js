@@ -29,12 +29,10 @@ class CreateExam extends React.Component{
                 title = item.title;
             }
         })
-        console.log(title)
         return(
             <div>
                 
-        <h2 style={{display: 'flex', justifyContent: 'center'}} >Enter Exam information here for {title}!</h2>
-                   
+                    <h2 style={{display: 'flex', justifyContent: 'center'}} >Enter Exam information here for {title}!</h2>
                     {console.log(this.props.match.params.id)}
                     <ExamForm requestMethod="post"
                         moduleID={this.props.match.params.id}
@@ -45,5 +43,4 @@ class CreateExam extends React.Component{
         )
     }
 }
-
 export default CreateExam

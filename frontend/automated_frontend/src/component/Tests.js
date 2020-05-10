@@ -1,14 +1,11 @@
 import React from "react";
 import {List, Avatar, Icon, Button} from "antd";
-//import {Link} from "react-router-dom";
-//import ExamForm from "./ExamForm";
 const IconText = ({ type, text }) => (
   <span>
     <Icon type={type} style={{ marginRight: 8 }} />
     {text}
   </span>
 );
-
 class Tests extends React.Component {
     constructor(props)
     {
@@ -69,5 +66,4 @@ class Tests extends React.Component {
       )
   }
 }
-
 export default Tests

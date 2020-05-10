@@ -1,5 +1,4 @@
 import React from "react";
-//import Modules from "../component/Modules";
 import axios from "axios";
 import  {Card, Button} from 'antd'
 import ExamForm from "../component/ExamForm";
@@ -29,7 +28,6 @@ class DetailTestView extends React.Component {
     { 
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         return( 
-            
             <div>
                <Card title={this.state.module.title}>
                     <p>Name: {this.state.module.name}</p>
@@ -46,9 +44,7 @@ class DetailTestView extends React.Component {
                     <Button type="danger" htmlType="submit">Delete</Button>
                 </form>
             </div>
-            
         )
     }
 }
-//() => window.confirm("Are you sure you want to delete this module? ") && 
 export default DetailTestView;

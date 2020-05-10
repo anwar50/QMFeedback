@@ -30,10 +30,7 @@ class RegistrationForm extends React.Component {
             values.confirm,
             this.state.type
         );
-        //this.state.modulename = values.module
-        console.log(this.state.modulename)
-          //redirect to home page after signing up
-        this.props.history.push('/login');
+        console.log(this.state.modulename)        
       }
     });
   }
@@ -135,18 +132,15 @@ class RegistrationForm extends React.Component {
 }
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
-
 const mapStateToProps = (state) => {
     return {
         loading: state.loading,
         error: state.error
     }
 }
-
 const mapDispatchToProps = dispatch => {
     return {
         onAuth: (username, email, password1, password2, modulename) => dispatch(actions.authSignup(username, email, password1, password2, modulename)) 
     }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedRegistrationForm);

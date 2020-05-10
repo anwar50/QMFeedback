@@ -2,8 +2,6 @@ import React from "react";
 import {List, Avatar, Icon, Button} from "antd";
 import {Link} from "react-router-dom";
 import axios from "axios";
-//import {Link} from "react-router-dom";
-//import ExamForm from "./ExamForm";
 const IconText = ({ type, text }) => (
   <span>
     <Icon type={type} style={{ marginRight: 8 }} />
@@ -94,10 +92,6 @@ class Modules extends React.Component {
         tempProfile.map(function(item, i){
             if(item.user == id)
             {
-                        
-                
-                //the_arr.pop();
-                //return( the_arr.join('/') );
                 profile_picture = item.avatar;
             }
               
@@ -145,5 +139,4 @@ class Modules extends React.Component {
       )
   }
 }
-
 export default Modules

@@ -151,7 +151,6 @@ class TestList extends React.Component {
           key: 'action',
           render: (text, record) => (
             <span>
-              {/* <a href="#">Action 一 {record.test}</a> */}
               <Button onClick={(e) => this.saveTest(question_id, this.props.match.params.userid)} type="primary" htmlType="submit">Save Test</Button>
               <Divider type="vertical" />
               <Link to={`/addGrade/` + question_id + '/' + title + '/' + record.test_count}>
@@ -174,7 +173,6 @@ class TestList extends React.Component {
               date_creation: new Date(date).toLocaleDateString([], options),
             },
           ];
-          
         console.log(this.state.module[0])
             return(
                 <div >
@@ -189,5 +187,4 @@ class TestList extends React.Component {
             )
     }
 }
-
 export default TestList;

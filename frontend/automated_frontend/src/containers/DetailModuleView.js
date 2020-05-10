@@ -1,5 +1,4 @@
 import React from "react";
-//import Modules from "../component/Modules";
 import axios from "axios";
 import  {Card, Button} from 'antd'
 import CustomForm from "../component/Form";
@@ -49,5 +48,4 @@ class DetailModuleView extends React.Component {
         )
     }
 }
-//() => window.confirm("Are you sure you want to delete this module? ") && 
 export default DetailModuleView;

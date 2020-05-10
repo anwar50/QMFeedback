@@ -1,12 +1,10 @@
 import React from "react";
-import { Layout, Menu, Breadcrumb, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Avatar, Popover} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import "../css/Layout.css"
 import {connect} from "react-redux";
 import * as actions from "../store/actions/authActions";
 import axios from "axios";
-
 const { Header, Content, Footer } = Layout;
 class CustomLayout extends React.Component {
     constructor(props)
@@ -19,7 +17,6 @@ class CustomLayout extends React.Component {
         }
     }
     componentDidMount(){
-        
         axios.all([
             axios.get('http://127.0.0.1:8000/api/users'),
             axios.get('http://127.0.0.1:8000/api/list/profile'),
@@ -33,19 +30,19 @@ class CustomLayout extends React.Component {
                 console.log(this.state.profile)
                 
         }))
-        
     }
     logout = () => {
-        this.props.history.push('/home');
+        this.props.isAuthenticated = false;
+        this.props.history.push('/login');  
     }
     render(){
         let tempUsers = this.state.users
         let tempProfile = this.state.profile
-
-        
         let id = this.props.username
         let user_id = 0
         let profile_picture = ""
+        let department = ""
+        let role = ""
         console.log(id)
         tempUsers.map(function(item, i){
             if(item.username == id)
@@ -54,28 +51,25 @@ class CustomLayout extends React.Component {
             } 
             console.log(user_id)
         })
-        
         tempProfile.map(function(item, i){
             if(item.user == user_id)
-            {
-                        
-                
-                //the_arr.pop();
-                //return( the_arr.join('/') );
+            {                
                 profile_picture = item.avatar;
+                department = item.department;
+                role = item.user_type;
             }
-              
         })
-        
-        console.log(this.props)
-        console.log(this.props.username)
-        console.log(this.state.users)
-        console.log(profile_picture)
+        const profileContent = (
+            <div>
+              <p>Name: {id}</p>
+              <p>Department: {department}</p>
+              <p>Role: {role}</p>
+            </div>
+          );
         return(
             <Layout className="layout">
             <Header>
             <div className="logo" />
-            
             <Menu
                 align = "right"
                 theme="dark"
@@ -86,11 +80,8 @@ class CustomLayout extends React.Component {
                 <Menu.Item style={{float: 'left', color: 'skyblue', fontSize: '29px'}} key="22">
                    <Link to="/">QM Feedback</Link>
                 </Menu.Item>
-                
                 {
-                    this.props.isAuthenticated ? 
-                        //the onclick function had this.props.logout before you took it out!
-                    
+                    this.props.isAuthenticated ?                     
                     <Menu.Item key="6" onClick={this.props.logout} style={{ justifyContent: 'space-between'}}>
                         Logout
                     </Menu.Item>
@@ -123,7 +114,6 @@ class CustomLayout extends React.Component {
                     : 
                     null
                 }
-                
                 <Menu.Item key="3">
                     <Link to="/grade">Grade Mechanism</Link>
                 </Menu.Item>
@@ -134,9 +124,13 @@ class CustomLayout extends React.Component {
                     <Link to="/FAQ">FAQ</Link>
                 </Menu.Item>
                 {
-                    this.props.isAuthenticated ?
-                    // <Avatar style={{ textAlign: 'center', color: '#f56a00', backgroundColor: '#fde3cf', width: '40px', height: '40px'}}>{this.props.username}</Avatar>
-                    <Avatar size={54} src={profile_picture} />
+                    this.props.isAuthenticated ? 
+                    
+                    <Menu.Item key="56">
+                        <Popover content={profileContent} style={{textAlign: 'center'}} title="Your Profile">
+                            <Avatar size={54} src={profile_picture} />
+                        </Popover>
+                    </Menu.Item>
                     :
                     null
                 }
@@ -158,8 +152,7 @@ class CustomLayout extends React.Component {
 }
 const mapDispatchToProps = dispatch => {
     return {
-      logout: () => dispatch(actions.logout())
+      logout: () => dispatch(actions.logout()),
     }
 }
-
 export default withRouter(connect(null, mapDispatchToProps)(CustomLayout));

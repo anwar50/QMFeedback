@@ -36,9 +36,6 @@ class FeedbackForm extends React.Component {
                     testres.data.map(function(item, i){
                         if(item.name == id)
                         {
-                            // this.setState({
-                            //     test_id: item.id
-                            // })
                             console.log(item.id)
                             test_id = item.id
                         }
@@ -110,5 +107,4 @@ class FeedbackForm extends React.Component {
     );
   }
 }
-
 export default FeedbackForm

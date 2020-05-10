@@ -1,61 +1,63 @@
 import React from "react";
 import { Form, Icon, Input, 
-  Button, Spin}  from 'antd';
+  Button, Spin, message}  from 'antd';
 import {connect} from "react-redux"
-import {NavLink} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 import * as actions from "../store/actions/authActions"
 import axios from "axios";
 const FormItem = Form.Item;
 const antIcon = <Icon type="loading" style={{fontSize: 24}} spin />;
-
 class NormalLoginForm extends React.Component {
   constructor(props){
     super(props)
     {
       this.state ={
-        user_type: ''
+        user_type: '',
+        redirect: false,
+        username: ""
       }
     }
   }
-  // checkUsername = (rule, value, callback) => {
-  //   // const form = this.props.form;
-  //   form.setFields({
-  //     username: {
-  //       value: 'asdas'
-  //     }
-  //   });
-  //   // form.setFieldsValue ('pedro, manada');
-  // }
-
   handleSubmit = (e) => {
     e.preventDefault();
     let user_type = ''
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.onAuth(values.userName, values.password)
-      }
-      axios.get(`http://127.0.0.1:8000/api/users`)
+        axios.get(`http://127.0.0.1:8000/api/users`)
         .then(res => {
+            let found = false
             {res.data.map(function(item, i){
               if(item.username == values.userName)
               {
-                user_type = item.user_type
+                found = true
+                user_type = item.user_type 
               }
             })}
+            if(found)
+            {
+              this.setState({redirect: true, username: values.userName})
+            }
             console.log(res.data) 
             console.log(user_type)
-            //redirect you to home page after login
-            this.props.history.push(`/savedtests/` + values.userName + '/');
-        })
+        })        
+      }
+      else
+      {
+        message.error('You have not entered anything, please try again!');
+      }
     });
   }
-
   render() {
     let errorMessage = null;
     if(this.props.error){
       errorMessage = (
-        <p>{this.props.error.message}</p>
+        <p>{" Your details were incorect, please try to login again!"}</p>
       )
+    }
+    if(this.state.redirect)
+    {
+      return <Redirect to={`/modulesList/` + this.state.username + '/'}/>
     }
     const { getFieldDecorator } = this.props.form;
     return (
@@ -94,7 +96,6 @@ class NormalLoginForm extends React.Component {
             <FormItem>
                 <Button type="primary" htmlType="submit" style={{marginRight: '12px'}}>login</Button>
                 or
-
                 <NavLink 
                   style={{marginRight: '11px'}} 
                   to="/registerteacher/"> Sign Up As a teacher
@@ -106,10 +107,7 @@ class NormalLoginForm extends React.Component {
     );
   }
 }
-
 const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
-
-
 const mapStateToProps = (state) => {
   return{
     loading: state.loading,
@@ -121,6 +119,5 @@ const mapDispatchToProps = dispatch => {
     onAuth: (username, password) => dispatch(actions.authLogin(username, password))
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm);
 

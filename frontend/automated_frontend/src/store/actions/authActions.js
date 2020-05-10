@@ -23,6 +23,7 @@ export const authFail = error => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
+    window.location = '/login';
     return {
         type: actionTypes.AUTH_LOGOUT
     };
@@ -48,6 +49,7 @@ export const authLogin = (username, password) => {
             localStorage.setItem('expirationDate', expirationDate);
             dispatch(authSuccess(token, username));
             dispatch(checkAuthTimeout(3600));
+            //this.props.history.push(`/savedtests/` + username + '/');
         })
         .catch(err => {
             dispatch(authFail(err))
@@ -73,13 +75,13 @@ export const authProfile = (type, username, avatar) => {
                         console.log(res)
                     })
                     .catch(err => {
-                        // dispatch(authFail(err))
                         console.log(err)
                     })
                 }
             })
             console.log(user_data)
         })
+        window.location = '/login';
 }
 export const authSignup = (username, email, password1, password2, avatar) => {
     return dispatch => {
@@ -109,29 +111,6 @@ export const authSignup = (username, email, password1, password2, avatar) => {
         })
     }
 }
-// export const authSignup = (username, email, password1, password2) => {
-//     return dispatch => {
-//         dispatch(authStart());
-//         axios.post('http://127.0.0.1:8000/rest-auth/registration/', {
-//             username: username,
-//             email: email,
-//             password1: password1,
-//             password2: password2
-//         })
-//         .then(res => {
-//             const token = res.data.key;
-//             const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-//             localStorage.setItem('token', token);
-//             localStorage.setItem('expirationDate', expirationDate);
-//             dispatch(authSuccess(token));
-//             dispatch(checkAuthTimeout(3600));
-//         })
-//         .catch(err => {
-//             dispatch(authFail(err))
-//         })
-//     }
-// }
-
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');

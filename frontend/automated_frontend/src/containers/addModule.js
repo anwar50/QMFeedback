@@ -6,7 +6,6 @@ class AddModule extends React.Component{
         return(
             <div >
                 <h2 style={{display: 'flex', justifyContent: 'center'}} >Enter a module Information here!</h2>
-                    {/* <Button onClick={this.handleClick} style={{justifyContent:'center'}}>Enter a module that you teach!</Button> */}
                     <CustomForm requestMethod="post"
                         moduleID={null}
                         userID={this.props.match.params.userid}

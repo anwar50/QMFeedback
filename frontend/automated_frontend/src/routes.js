@@ -7,7 +7,6 @@ import TestList from "./containers/TestList"
 import GradeMechanism from "./component/Grade"
 import Grade from "./containers/addGrade";
 import AddModule from "./containers/addModule";
-import FeedbackMechanism from "./containers/FeedbackMechanism.js";
 import DetailTestview from "./containers/DetailTestView"
 import CreateExam from "./containers/CreateExam";
 import SignUpTeacher from "./containers/SignUpTeacher";
@@ -34,7 +33,6 @@ const BaseRouter = (props) => (
             <Route exact path="/addGrade/:id/:title/:testcount" component={Grade} />
             <Route exact path="/createExam/:id/:userid" component={CreateExam} />
             <Route exact path="/addmodule/:userid" component={AddModule} />
-            <Route exact path="/feedbackInfo" component={FeedbackMechanism} />
             <Route exact path="/savedtests/:id" component={SavedTests} />
             <Route exact path="/contact" component={ContactUs} />
             <Route exact path="/FAQ" component={FrequentlyAskedQuestions} />
@@ -43,7 +41,7 @@ const BaseRouter = (props) => (
             <Route exact path="/feedbackInfo/:id/:userid" component={FeedbackInformation} />  
             <Route exact path="/createFeedback/:testid/:userid" component={CreateFeedback} /> 
             <Route exact path="/reviewFeedback/:testid/:testmark/:testgrade/:correct/:incorrect/:effect/:userid" component={ReviewFeedback} />
-            <Route exact path="/chooseExistingFeedback/:testid/:testmark/:testgrade/:correct/:incorrect/:score/:effect/:userid" component={ChooseExistingFeedback} />
+            <Route exact path="/chooseExistingFeedback/:testid/:testmark/:testgrade/:correct/:incorrect/:effect/:userid" component={ChooseExistingFeedback} />
         </div>
 )
 export default BaseRouter

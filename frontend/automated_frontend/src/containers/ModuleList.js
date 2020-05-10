@@ -10,7 +10,6 @@ class ModuleList extends React.Component {
     }
     componentDidMount()
     {
-        
         axios.get('http://127.0.0.1:8000/api/modules')
         .then(res =>{ 
             this.setState({
@@ -39,5 +38,4 @@ class ModuleList extends React.Component {
         )
     }
 }
-
 export default ModuleList;

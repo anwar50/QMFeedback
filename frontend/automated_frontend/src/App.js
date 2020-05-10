@@ -6,7 +6,6 @@ import CustomLayout from "./containers/Layout";
 import {connect} from "react-redux";
 import  * as actions from "./store/actions/authActions";
 class App extends React.Component {
-
   componentDidMount() {
     this.props.onTryAutoSignUp();
   }
@@ -23,7 +22,6 @@ class App extends React.Component {
   }
   
 }
-
 const mapStateToProps = state => {
     return {
       isAuthenticated: state.token !== null ,

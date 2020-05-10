@@ -1,16 +1,91 @@
 import React from "react"
-import { List, Typography, Table, Icon, Divider, Button, Input, Modal, Form, Select} from 'antd';
+import {Table, Divider, Button, Input, Modal, Form, Select} from 'antd';
 import {Link} from "react-router-dom";
 import axios from "axios";
 import Highlighter from 'react-highlight-words';
+import PropTypes from 'prop-types';
 import { SearchOutlined } from '@ant-design/icons';
-
+import { TweenOneGroup } from 'rc-tween-one';
+const TableContext = React.createContext(false);
 const {Option} = Select;
 class SavedTests extends React.Component {
+    static propTypes = {
+      className: PropTypes.string,
+    };
+
+    static defaultProps = {
+      className: 'table-enter-leave-demo',
+    };
     constructor(props)
     {
-        super(props)
+        super(props);
+        this.columns = [];
+        this.newdata = [];
+        this.data = [];
+        this.enterAnim = [
+          {
+            opacity: 0, x: 30, backgroundColor: '#fffeee', duration: 0,
+          },
+          {
+            height: 0,
+            duration: 200,
+            type: 'from',
+            delay: 450,
+            ease: 'easeOutQuad',
+            onComplete: this.onEnd,
+          },
+          {
+            opacity: 1, x: 0, duration: 450, ease: 'easeOutQuad',
+          },
+          { delay: 1000, backgroundColor: '#fff' },
+        ];
+        this.pageEnterAnim = [
+          {
+            opacity: 0, duration: 0,
+          },
+          {
+            height: 0,
+            duration: 150,
+            type: 'from',
+            delay: 150,
+            ease: 'easeOutQuad',
+            onComplete: this.onEnd,
+          },
+          {
+            opacity: 1, duration: 150, ease: 'easeOutQuad',
+          },
+        ];
+        this.leaveAnim = [
+          { duration: 250, opacity: 0 },
+          { height: 0, duration: 200, ease: 'easeOutQuad' },
+        ];
+        this.pageLeaveAnim = [
+          { duration: 150, opacity: 0 },
+          { height: 0, duration: 150, ease: 'easeOutQuad' },
+        ];
+        
+        this.animTag = ($props) => {
+          return (
+            <TableContext.Consumer>
+              {(isPageTween) => {
+                return (
+                  <TweenOneGroup
+                    component="tbody"
+                    enter={!isPageTween ? this.enterAnim : this.pageEnterAnim}
+                    leave={!isPageTween ? this.leaveAnim : this.pageLeaveAnim}
+                    appear={false}
+                    exclusive
+                    {...$props}
+                  />
+                );
+              }}
+            </TableContext.Consumer>
+          );
+        };
+    
         this.state = {
+            data: this.data,
+            isPageTween: false,
             type: 'default',
             size: 'large',
             test: [],
@@ -24,9 +99,27 @@ class SavedTests extends React.Component {
             showPopupGrade: false,
             testName: "",
             moduleName: "",
-            test_id: 0
+            test_id: 0,
+            tableData: [],
         }
     }
+    onEnd = (e) => {
+      const dom = e.target;
+      dom.style.height = 'auto';
+    }
+  
+    
+    onDelete = (key, e) => {
+      e.preventDefault();
+      const data = this.state.data.filter(item => item.key !== key);
+      this.setState({ data, isPageTween: false });
+    }
+  
+    pageChange = () => {
+      this.setState({
+        isPageTween: true,
+      });
+    };
     handleChange = (e) => {
       const val = e.label
       console.log(val)
@@ -76,7 +169,6 @@ class SavedTests extends React.Component {
                       showingAlert: false,
                     });
                 }, 5000);
-                //window.location = '/feedbackstage/' + moduleID + '/' + this.props.userID
               })
               .catch(err => console.log(err))
           default:
@@ -166,16 +258,9 @@ class SavedTests extends React.Component {
                           showingAlert: false,
                         });
                     }, 5000);
-                    //redirect to home page after creating
-                  //window.location = '/Grade'
                 })
                 .catch(err => console.log(err))
               case 'post':
-                  // axios.put(`http://127.0.0.1:8000/api/module/${moduleID}/update/`, {
-                    
-                  // })
-                  // .then(res => console.log(res))
-                  // .catch(err => console.log(err))
                   return null
             }
           })
@@ -238,11 +323,6 @@ class SavedTests extends React.Component {
         clearInterval(timer);
         modal.destroy();
       }, secondsToGo * 1000);
-      // this.setState({
-      //   showPopupGrade: !this.state.showPopupGrade,
-      //   testName: test,
-      //   moduleName: mod
-      // });
     }
     componentDidMount(){
         axios.all([
@@ -263,11 +343,6 @@ class SavedTests extends React.Component {
                 console.log(this.state.savedtests)
                 console.log(this.state.grades)
         }))
-      // this.setState({
-      //   showPopup: !this.state.showPopup,
-      //   testName: test,
-      //   moduleName: mod,
-      // });
     }
     toggleGrade = (test, mod) =>{
       let secondsToGo = 600;
@@ -308,11 +383,7 @@ class SavedTests extends React.Component {
         clearInterval(timer);
         modal.destroy();
       }, secondsToGo * 1000);
-      // this.setState({
-      //   showPopupGrade: !this.state.showPopupGrade,
-      //   testName: test,
-      //   moduleName: mod
-      // });
+      
     }
     componentDidMount(){
         axios.all([
@@ -334,23 +405,27 @@ class SavedTests extends React.Component {
                 console.log(this.state.grades)
         }))
     }
-    handleDelete (e) {
+    handleDelete (key, test, e) {
+        e.preventDefault();
+        const data = this.state.data.filter(item => item.key !== key);
+        this.setState({ data, isPageTween: false });
         console.log(e)
         let TESTID = 0
         let found = false
-        
+        let temp_test = {}
         this.state.test.map(function(item, i){
-            if(item.name == e)
+            if(item.name == test)
             {
                 found = true
                 TESTID = item.id
                 axios.delete(`http://127.0.0.1:8000/api/test/${TESTID}/delete`);
-                //window.location.reload(false);
-                //window.location.href = '/'
             }
         }) 
         if(found)
         {
+          this.setState({
+            deletedTable: true,
+          })
           let secondsToGo = 10;
           const modal = Modal.success({
             title: 'Test for ' + e + ' has been deleted',
@@ -366,6 +441,7 @@ class SavedTests extends React.Component {
             clearInterval(timer);
             modal.destroy();
           }, secondsToGo * 1000);
+          this.forceUpdate();
         }
         else
         {
@@ -437,15 +513,17 @@ class SavedTests extends React.Component {
     };
     render(){
         const {id} = this.props.match.params
+        const {data} = this.state
         console.log(id)
         let test_id = []
-        let testInfo = []
+        let testInfo = {}
         let savedtests = []
         let testNames = []
         let modulei_ids = []
-        let TEMPMODULES = this.state.module
+        let temp_modules = this.state.module
         let savedGrades = []
-        let TEMPGRADES = this.state.grades
+        const temptest = []
+        let temp_grades = this.state.grades
         this.state.savedtests.map(function(item, i){
                 //check the username against the given username
             if(item.username === id)
@@ -454,61 +532,33 @@ class SavedTests extends React.Component {
                 test_id.push(item.module)
             }
         })
-        //console.log(TEMPTEST)
-            //retrieving the grades of all the tests
-        // this.state.grades.map(function(item, index){
-        //     let temp_test = {}
-        //     TEMPTEST.map(function(testID, i){
-        //         savedtests.map(function(TestID, i){
-        //             if(item.test == TestID && testID.id == TestID )
-        //             {
-        //                 //savedGrades.push(item.grade)
-        //                 temp_test = {
-        //                     key: index,
-        //                     name: testID.name,
-        //                     address: item.grade,
-        //                 }
-        //             }
-        //             if(item.test == "")
-        //             {
-        //                 console.log(testID.name)
-        //             }
-        //         })
-        //     })
-        //     testInfo.push(temp_test)
-        // })
         this.state.test.map(function(item, i){
             savedtests.map(function(testID, i){
                 if(item.id == testID)
                 {
                     testNames.push(item.name);
-                    // testInfo.push({
-                    //     key: i,
-                    //     name: 'John Brown',
-                    //     age: item.name,
-                    //     address: 'New York No. 1 Lake Park',
-                    // })
                     modulei_ids.push(item.module)
                 }
             })
         })
         this.state.test.map(function(item, index){
             let temp_test = {}
-            TEMPGRADES.map(function(GRADE, i){
-                savedtests.map(function(SAVEDTESTID, i){
-                    if(item.id == SAVEDTESTID && GRADE.test == SAVEDTESTID)
+            temp_grades.map(function(gradeid, i){
+                savedtests.map(function(savedtestid, i){
+                    if(item.id == savedtestid && gradeid.test == savedtestid)
                     {
-                        TEMPMODULES.map(function(MODID, i){
-                            if(item.module == MODID.id){
-                                console.log(item.name + " " + GRADE.grade)
+                        temp_modules.map(function(modid, i){
+                            if(item.module == modid.id){
+                                console.log(item.name + " " + gradeid.grade)
                                 temp_test = {
                                     key: index,
-                                    name: MODID.title,
+                                    name: modid.title,
                                     test: item.name,
-                                    grade: GRADE.grade,
-                                    mark: GRADE.grade_mark
+                                    grade: gradeid.grade,
+                                    mark: gradeid.grade_mark
                                 }
-                                testInfo.push(temp_test)
+                                temptest.push(temp_test)
+                                testInfo = temp_test
                             }
                         })
                         
@@ -521,46 +571,21 @@ class SavedTests extends React.Component {
                 if(item.id == testID)
                 {
                     testNames.push(item.name);
-                    // testInfo.push({
-                    //     key: i,
-                    //     name: 'John Brown',
-                    //     age: item.name,
-                    //     address: 'New York No. 1 Lake Park',
-                    // })
                     modulei_ids.push(item.module)
                 }
             })
             
         })
-        // this.state.module.map(function(ittem, i){
-        //     modulei_ids.map(function(ModID, i){
-        //         if(ModID == ittem.id)
-        //         {
-        //             moduleNames.push(ittem.title)
-        //         }
-        //     })
-        // })
-        console.log(savedGrades)
-        console.log(testNames)
-        // testNames.map(function(item, index){
-        //     let temp_test = {}
-        //     savedGrades.map(function(grades, i){
-        //         temp_test = {
-        //             key: index,
-        //             name: item,
-        //             address: grades,
-        //         }
-        //     })
-        //     testInfo.push(temp_test)
-        // })
-        console.log(testInfo)
+        for(var i = 0; i < temptest.length; i++)
+        {
+          this.data.push(temptest[i]);
+        }
         const columns = [{
             title: 'Module Name',
             dataIndex: 'name',
             key: 'name',
             ...this.getColumnSearchProps('name'),
             render: (text) => {
-                        //    console.log(text);
               return {
                 children: text,
                 props: {
@@ -578,7 +603,6 @@ class SavedTests extends React.Component {
             dataIndex: 'grade',
             ...this.getColumnSearchProps('grade'),
             render: (text) => {
-                        //    console.log(text);
               return {
                 children: text,
                 props: {
@@ -596,32 +620,40 @@ class SavedTests extends React.Component {
             key: 'action',
             render: (text, record) => (
               <span>
-                {/* <a href="#">Action 一 {record.test}</a> */}
                 <Link to={`/feedbackInfo/` + record.test + `/` + this.props.match.params.id}>Generate feedback</Link>
                 <Divider type="vertical" />
                 <Button onClick={(e) => this.toggle(record.test, record.name)} type="primary" htmlType="submit">Update Test</Button>
                 <Divider type="vertical" />
-                <Button onClick={(e) => this.handleDelete(record.test)} type="danger" htmlType="submit">Delete Test</Button>
+                <Button onClick={(e) => this.handleDelete(record.key, record.test, e)} type="danger" htmlType="submit">Delete Test</Button>
               </span>
             ),
           }];
-          
-        var divStyle = {
-            height: "40vh", /* Magic here */
-            width: "200vh",
-            top: "50vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-        };
+        this.columns = columns
         return(
-            
             <div>
               <h1 style={{textAlign: 'center'}}>Welcome back {this.props.match.params.id.toUpperCase()} heres a summary of your saved tests!</h1>
-                <Table columns={columns} dataSource={testInfo} />
+                <div className={`${this.props.className}-wrapper`}>
+                <div className={this.props.className}>
+                  <div className={`${this.props.className}-table-wrapper`}>
+                  <TableContext.Provider value={this.state.isPageTween}>
+                    <Table
+                      columns={this.columns}
+                      dataSource={this.state.data}
+                      pagination ={{
+                        total: this.state.data.length,
+                        pageSize: this.state.data.length,
+                        hideOnSinglePage: true
+                      }}
+                      className={`${this.props.className}-table`}
+                      components={{ body: { wrapper: this.animTag } }}
+                      onChange={this.pageChange}
+                    />
+                  </TableContext.Provider>
+                  </div>
+                </div>
+              </div>
             </div>
         )
     }
 }
-
 export default SavedTests

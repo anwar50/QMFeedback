@@ -2,9 +2,8 @@ import React from "react";
 import { Statistic, Form, Button, Input,Card, Col, Row, Spin, Typography, Modal, Tooltip, List  } from "antd";
 import axios from "axios";
 import {Link} from "react-router-dom";
-import '../css/reviewFeedback.css';
+import '../css/Review.css';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Chart, Axis,  Geom } from 'bizcharts'
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const {Text} = Typography;
 class ReviewFeedback extends React.Component{
@@ -37,8 +36,6 @@ class ReviewFeedback extends React.Component{
         const correct = this.props.match.params.correct
         const incorrect = this.props.match.params.incorrect
         const effectiveness = this.props.match.params.effect
-      
-        let final_effect = ""
         let temp_feedback = [];
         let improvement_feedback = [];
         let test_id = 0
@@ -79,10 +76,6 @@ class ReviewFeedback extends React.Component{
             console.log(res.data)
             temp_feedback = res.data[0]
             improvement_feedback = res.data[1]
-            var q1 = (0.25*improvement_feedback.length+1)
-            var q2 = (0.5*improvement_feedback.length+1)
-            var q3 = (0.75*improvement_feedback.length+1)
-            
             var random_feedback = temp_feedback[Math.floor(Math.random()*temp_feedback.length)];
             var improvement = improvement_feedback[Math.floor(Math.random()*improvement_feedback.length)]
             console.log(random_feedback)
@@ -163,13 +156,10 @@ class ReviewFeedback extends React.Component{
             })
         })
     }
-    generateImprovementfeedback(testName, testGrade, testMark, correct, incorrect, effect){
-        
+    generateImprovementfeedback(testName, testGrade, testMark, correct, incorrect, effect){   
         this.setState({
             giveImprovement: true,
         })
-        
-        
     }
     createImprovement(test){
       let secondsToGo = 600;
@@ -258,14 +248,11 @@ class ReviewFeedback extends React.Component{
       list_marks = this.state.marks.split(",")
       const data = [];
       list_topics.map((i,j) =>{
-        
         data.push({title: list_topics[j], mark: list_marks[j]})
-        
       })
       console.log(list_topics)
         return(
-            <div >
-                
+            <div className="reviewdiv"> 
                 <Row gutter={10} justify="space-around" type="flex">
                   <Col span={6}>
                     <Card className="popupreview" bordered style={{color: 'blue', textAlign: 'center', fontSize: '28px'}} title="Test Information" bordered={false}>
@@ -287,12 +274,6 @@ class ReviewFeedback extends React.Component{
                         <Statistic  title="Type of test" value={this.state.question_type} suffix={" "} />
                       </Col>
                     </Row>
-                      {/* <Text strong>Test Name:</Text> <Text strong style={{color: '#096dd9'}}>{this.props.match.params.testid}</Text> <br/>
-                      <Text strong>Test Grade:</Text> <Text strong style={{color: '#096dd9'}}>{this.props.match.params.testgrade}</Text> <br />
-                      <Statistic title="Test Mark" value={this.props.match.params.testmark} suffix={" "+ 8} />
-                      <Text strong>Test Mark:</Text> <Text strong style={{color: '#096dd9'}}>{this.props.match.params.testmark} %</Text> <br/>
-                      <Text strong>Correct Answers:</Text> <Text strong style={{color: '#096dd9'}}>{this.props.match.params.correct}</Text> <br/>
-                      <Text strong>Incorrect Answers:</Text> <Text strong style={{color: '#096dd9'}}>{this.props.match.params.incorrect}</Text> <br/> */}
                     </Card>
                   </Col>
                   <Col>
@@ -400,8 +381,7 @@ class ReviewFeedback extends React.Component{
                 <br/>
                 <Row>
                   <Col span={8}>
-                    <Card className="popupreview" headStyle={{backgroundColor: 'red'}} bordered style={{color: 'blue'}} title="Improvement Feedback" bordered={false}>
-                        
+                    <Card className="popupreview" headStyle={{backgroundColor: 'red'}} bordered style={{color: 'blue'}} title="Improvement Feedback" bordered={false}>     
                         <Text strong>Feedback: {this.state.personalImprovementGiven 
                         ? <Text strong style={{color: '#096dd9'}}>{this.state.personalImprovement}</Text> : <Text strong style={{color: '#096dd9'}}>{this.state.giveImprovement ?  this.state.improvementFeedbackData.review : null}</Text> }</Text>
                         <Text strong>{this.state.showFeedback ? <Button onClick={(e) => this.generateImprovementfeedback(this.props.match.params.testid, this.props.match.params.testgrade, this.props.match.params.testmark, this.props.match.params.correct, this.props.match.params.incorrect, this.props.match.params.effect)}>Find out feedback for areas of improvement</Button> : <Spin indicator={antIcon} />}</Text><br />
@@ -438,19 +418,19 @@ class ReviewFeedback extends React.Component{
                             {this.state.improvementFeedbackData.category}
                           </Text> : <Spin indicator={antIcon} />} <br />
                     </Card> 
-                    }
-                       
+                    }     
                   </Col>      
                 </Row>
-                <div className="btnFeedback" style={{textAlign: 'center',  marginLeft: "30%",marginRight: '50%', margin: '23px'}}>
-                    
+                <div className="btnFeedback" style={{textAlign: 'center',  marginLeft: "30%",marginRight: '50%', margin: '23px'}}> 
                     <Button style={{ margin: '5px'}} type="primary" onClick={(e) => this.generateFeedback(this.props.match.params.testid, this.props.match.params.testgrade, this.props.match.params.testmark, this.props.match.params.correct, this.props.match.params.incorrect, this.props.match.params.effect)}>Generate another feedback?</Button>
-                    <Link to={`/chooseExistingFeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.feedbackData.score + `/` + this.props.match.params.effect + `/` + this.props.match.params.userid}><Button style={{marginLeft: '70%', margin: '5px'}} type="primary">Choose from a batch of feedbacks?</Button></Link>
-                    <Link to={`/generatefeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.feedbackData.score + `/` + this.state.feedbackData.review + `/` + this.state.improvementFeedbackData.review + `/` + this.state.AreasOfImprovement + `/` + this.props.match.params.effect + `/` + this.props.match.params.userid}><Button style={{marginLeft: '70%', margin: '5px'}} type="primary">Happy to see the full result?</Button></Link>
+                    {
+                      this.state.personalImprovementGiven ?
+                      <Link to={`/generatefeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.feedbackData.score + `/` + this.state.feedbackData.review + `/` + this.state.personalImprovement + `/` + this.state.AreasOfImprovement + `/` + this.props.match.params.effect + `/` + this.props.match.params.userid}><Button style={{marginLeft: '70%', margin: '5px'}} type="primary">Happy to see the full result?</Button></Link>
+                      :
+                      <Link to={`/generatefeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.feedbackData.score + `/` + this.state.feedbackData.review + `/` + this.state.improvementFeedbackData.review + `/` + this.state.AreasOfImprovement + `/` + this.props.match.params.effect + `/` + this.props.match.params.userid}><Button style={{marginLeft: '70%', margin: '5px'}} type="primary">Happy to see the full result?</Button></Link>
+                    }
                     <Link to={`/createFeedback/` + this.props.match.params.testid + '/' + this.props.match.params.userid}><Button type="primary" htmlType="submit" style={{alignItems:'center'}}>Not happy with any of these feedbacks?</Button></Link>
-                  
                 </div>
-                
             </div>
         )
     }

@@ -2,8 +2,6 @@ import { Form, Input, Button, Modal} from 'antd';
 import React from "react"
 import axios from "axios";
 import {Link, Redirect} from "react-router-dom";
-// const {Option} = Select;
-
 class CustomForm extends React.Component {
   constructor(props){
     super(props);
@@ -82,7 +80,6 @@ class CustomForm extends React.Component {
                         }, secondsToGo * 1000);
                     })
                     .catch(err => {
-                        // dispatch(authFail(err))
                         console.log("Error")
                     })
                 }
@@ -155,5 +152,4 @@ class CustomForm extends React.Component {
     );
   }
 }
-
 export default CustomForm

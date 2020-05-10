@@ -34,31 +34,7 @@ class ChooseExistingFeedback extends React.Component{
       this.setState({ value });
     };
     componentDidMount(){
-        // const testName = this.props.match.params.testid
-        // const testGrade = this.props.match.params.testgrade
-        // const testMark = this.props.match.params.testmark
-        // const correct = this.props.match.params.correct
-        // const incorrect = this.props.match.params.incorrect
-        // let test_id = 0
-        // let final_effect = ""
-        // axios.get(`http://127.0.0.1:8000/api/processnltk/${testName}/${testGrade}/${testMark}/${correct}`)
-        // .then(res => {
-        //     console.log(res.data)
-        //     var random_feedback = res.data[Math.floor(Math.random()*res.data.length)];
-        //     console.log(random_feedback)
-        //     if(random_feedback.category == "negative")
-        //     {
-        //       this.setState({
-        //         improvement: true,
-        //       })
-        //     }
-        //     this.setState({
-        //         data: random_feedback,
-        //         showFeedback: true
-        //     })
-            
-        // })
-        
+      
     }
     generateFeedback(testName, testGrade, testMark, correct){
         console.log("hi yes!!")
@@ -127,7 +103,6 @@ class ChooseExistingFeedback extends React.Component{
             temp_feedback = res.data[0]
             improvement_feedback = res.data[1]
             var improvement = improvement_feedback[Math.floor(Math.random()*improvement_feedback.length)]
-            // var random_feedback = res.data[Math.floor(Math.random()*res.data.length)];
             for(let i = 0; i < total; i++)
             {
                 var random_feedback = temp_feedback[Math.floor(Math.random()*temp_feedback.length)];
@@ -193,26 +168,7 @@ class ChooseExistingFeedback extends React.Component{
           modal.destroy();
         }, secondsToGo * 1000);
       }
-    SendFeedback(e)
-    {
-        console.log(e)
-        // let secondsToGo = 10;
-        //     const modal = Modal.success({
-        //       title: 'Feedback for ' + test + ' has been saved! Go check your saved feedbacks to check them out!!',
-        //       content: <Link to={`/generatefeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.data.score + `/` + this.state.data.review + `/` + this.props.match.params.userid}>See full result</Link>,
-        //     });
-        //     const timer = setInterval(() => {
-        //       secondsToGo -= 1;
-        //       modal.update({
-        //         content: `This message will be destroyed after ${secondsToGo} seconds.`,
-        //       });
-        //     }, 1000);
-        //     setTimeout(() => {
-        //       clearInterval(timer);
-        //       modal.destroy();
-        //     }, secondsToGo * 1000);
-        //`/generatefeedback/` + this.props.match.params.testid + `/` + this.props.match.params.testmark +`/` + this.props.match.params.testgrade + `/` + this.props.match.params.correct +`/`+ this.props.match.params.incorrect +`/` + this.state.data.score + `/` + this.state.data.review + `/` + this.props.match.params.userid
-    }
+    
     render()
     {
       let testName = this.props.match.params.testid
@@ -263,7 +219,7 @@ class ChooseExistingFeedback extends React.Component{
                         />
                     </Card>
                   </Col>
-                  {/* Improvement feedback */}
+                  {/* Improvement Information */}
                   
                   <Col>
                     {
@@ -282,14 +238,22 @@ class ChooseExistingFeedback extends React.Component{
                     </Card> 
                     }
                        
-                  </Col>  
+                  </Col> 
+                  {/* Information Feedback*/}
                   <Col span={8}>
                     <Card className="popupreview" headStyle={{backgroundColor: 'red'}} bordered style={{color: 'blue'}} title="Improvement Feedback" bordered={false}>
                         
-                        <Text strong>Feedback: {this.state.personalImprovementGiven 
-                        ? <Text strong style={{color: '#096dd9'}}>{this.state.personalImprovement}</Text> : <Text strong style={{color: '#096dd9'}}>{this.state.giveImprovement ?  this.state.improvementFeedback.review : null}</Text> }</Text>
-                        <Text strong>{this.state.showFeedback ? <Button onClick={(e) => this.generateImprovementfeedback(this.props.match.params.testid, this.props.match.params.testgrade, this.props.match.params.testmark, this.props.match.params.correct, this.props.match.params.incorrect, this.props.match.params.effect)}>Find out feedback for areas of improvement</Button> : <Spin indicator={antIcon} />}</Text><br />
-                        <Text strong>{this.state.showFeedback ? <Button onClick={(e) => this.createImprovement(this.props.match.params.testid)}>Create your own improvement feedback</Button> : null}</Text>
+                        <Text strong>Feedback: 
+                          {
+                          this.state.giveImprovement 
+                          ? 
+                          <Text strong style={{color: '#096dd9'}}>
+                            {this.state.improvementFeedback.review}
+                          </Text> 
+                          : 
+                          <Spin indicator={antIcon} />
+                          }
+                        </Text>
                     </Card>
                   </Col>
                   
@@ -300,31 +264,7 @@ class ChooseExistingFeedback extends React.Component{
                     <div style={{textAlign: 'center'}}>
                       {this.state.data.map(function(item, i){
                         let title = "Feedback " + (i+1)
-                        let review = item.review
-                       function SendFeedback(review)
-                        {
-                          //<Button onClick={(e) => this.SendFeedback("ggg")}>HEY</Button>
-                          
-                            console.log(review)
-                            let secondsToGo = 20;
-                                const modal = Modal.success({
-                                  title: 'Thank you for choosing a feedback! You can now choose to save or export!',
-                                  content: '',
-                                });
-                                const timer = setInterval(() => {
-                                  secondsToGo -= 1;
-                                  modal.update({
-                                    content: `This message will be destroyed after ${secondsToGo} seconds` ,
-                                  });
-                                }, 1000);
-                                setTimeout(() => {
-                                  clearInterval(timer);
-                                  modal.destroy();
-                                }, secondsToGo * 1000);
-                            //`/generatefeedback/` + testName + `/` + testMark +`/` + testGrade + `/` + correct + `/` + incorrect +`/` + score + `/` + review + `/` + userid
-                        }
                         let score = Math.round(item.score * 100)
-                        
                         return(
                           <Col span={5} style={{textAlign: 'center'}}>
                             <Card bordered style={{ color: 'blue'}} title={title} bordered={false}>

@@ -38,18 +38,14 @@ class FeedbackInformation extends React.Component {
     }
     saveFeedback(event1, event2) {
         console.log(event1 + "" + event2)
-        // axios.post(`http://127.0.0.1:8000/api/save/test/`,{
-        //   test: event1,
-        //   username: event2
-        // })
-      }
+    }
     handleSave (test, grade, feedback, user, percentage) {
         let found = false
         let tempgrade = this.state.grades;
         let temptest = this.state.test;
         let grade_id = 0;
         let test_id = 0;
-        //remove the percentage sign from the number
+            //remove the percentage sign from the number
         percentage = percentage.replace(/[^\w\s]|_/g, "")
         .replace(/\s+/g, " ");
         tempgrade.map(function(gradeID, i){
@@ -98,9 +94,7 @@ class FeedbackInformation extends React.Component {
       const openNotification = () => {
         let total = correct + incorrect;
         notification.open({
-          message: correct + ' out of ' + total,
-          // description:
-          //   'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          message: correct + ' out of ' + total, 
            onClick: () => {
             console.log('Notification Clicked!');
           },
@@ -116,7 +110,6 @@ class FeedbackInformation extends React.Component {
         let correct = 0
         let total = 0
         let incorrect = 0
-        let final_generated_feedback = []
         let sub_questions = 0
             //first get the id of the test based on the test name given
         this.state.test.map(function(item, i){
@@ -142,91 +135,6 @@ class FeedbackInformation extends React.Component {
             incorrect = item.total_mark_for_question - item.total_sub_marks
           }
         })
-            //randomly generate a feedback whether its positive or negative
-        var random_feedback = final_generated_feedback[Math.floor(Math.random()*final_generated_feedback.length)];
-        var random_percentage = 0
-        this.state.generatedFeedback.map(function(item, i){
-          if(random_feedback == item.feedback_bank)
-          {
-              random_percentage = item.percentage
-          }
-        })
-        console.log(random_feedback)
-        function generateFeedback(){
-            console.log("f")
-        }
-
-        const columns = [{
-            title: 'Test Name',
-            dataIndex: 'test',
-            key: 'test',
-            width: '10%',
-          
-            render: (text) => {
-                        //    console.log(text);
-              return {
-                children: text,
-                props: {
-                  'data-tip': 'a very long text',
-                },
-              };
-            },
-          }, {
-            title: 'Grade given',
-            dataIndex: 'grade',
-            key: 'grade',
-            width: '10%',
-          }, {
-            title: 'Feedback Generated',
-            dataIndex: 'feedback',
-            width: '30%',
-            render: (text) => {
-                        //    console.log(text);
-              return {
-                children: text,
-                props: {
-                  'data-tip': 'a very long text',
-                },
-              };
-            },
-          }, 
-          {
-            title: 'Feedback percentage',
-            dataIndex: 'percentage',
-            width: '10%',
-            render: (text) => {
-                        //    console.log(text);
-              return {
-                children: text,
-                props: {
-                  'data-tip': 'a very long text',
-                },
-              };
-            },
-          }, {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-              <span>
-                {/* <a href="#">Action 一 {record.test}</a> */}
-                 <Button onClick={(e) => this.handleSave(record.test, record.grade, random_feedback, this.props.match.params.userid, record.percentage)} type="primary" htmlType="submit">Save Feedback</Button>
-                {/*<Divider type="vertical" />
-                <Link to={`/createFeedback/` + record.test}><Button type="primary" htmlType="submit">Write your own feedback</Button></Link>
-                <Divider type="vertical" />
-                <CSVLink data={id + " : " + test_grade + " : " + random_feedback} ><Button type="primary" htmlType="submit" >Export Feedback</Button></CSVLink>
-            */}</span>
-            ),
-          }];
-          const testInfo = [{
-            key: '1',
-            test: id,
-            grade: test_grade,
-            feedback: "yes",
-            percentage: "e"
-          }];
-          const Info = [{
-
-          }];
         return(
             <div>
               <div className="site-card-wrapper">
@@ -265,9 +173,9 @@ class FeedbackInformation extends React.Component {
                     <Button type="primary" onClick={openNotification}>
                         Open the see overall mark
                     </Button> <br /><br/>
-                    {/* <Link to={`/generatefeedback/` + this.props.match.params.id + `/` + this.props.match.params.userid}><Button>Happy to go and generate a feedback?</Button></Link>
-                     */}
-                     <Link to={`/reviewFeedback/` + this.props.match.params.id + `/` + test_mark +`/` + test_grade + `/` + correct +`/`+ incorrect +`/` + effect + `/` +this.props.match.params.userid}><Button>Happy to go and generate a feedback?</Button></Link>
+                    <Link to={`/reviewFeedback/` + this.props.match.params.id + `/` + test_mark +`/` + test_grade + `/` + correct +`/`+ incorrect +`/` + effect + `/` +this.props.match.params.userid}><Button>Happy to go and generate a feedback?</Button></Link>
+                    <br /><br/>
+                    <Link to={`/chooseExistingFeedback/` + this.props.match.params.id + `/` + test_mark +`/` + test_grade + `/` + correct +`/`+ incorrect +`/` + effect + `/` + this.props.match.params.userid}><Button style={{marginLeft: '70%', margin: '5px'}} >Choose from a batch of feedbacks?</Button></Link>
                   </div>
                 </Row>
               </div>
@@ -276,21 +184,4 @@ class FeedbackInformation extends React.Component {
         )
     }
 }
-
 export default FeedbackInformation
-
-
-// Take a look at this npm library - https://www.npmjs.com/package/react-csv
-
-// For example -
-
-// import {CSVLink, CSVDownload} from 'react-csv';
-
-// const csvData =[
-//   ['firstname', 'lastname', 'email'] ,
-//   ['John', 'Doe' , 'john.doe@xyz.com'] ,
-//   ['Jane', 'Doe' , 'jane.doe@xyz.com']
-// ];
-// <CSVLink data={csvData} >Download me</CSVLink>
-// // or
-// <CSVDownload data={csvData} target="_blank" />

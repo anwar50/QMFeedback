@@ -69,8 +69,6 @@ class ExamForm extends React.Component {
                   showingAlert: false,
                 });
               }, 5000);
-               // window.location = '/feedbackstage/' + moduleID + '/' + this.props.userID
-              // this.props.dispatch(push('/feedbackstage/' + moduleID + '/' + this.props.userID))
           })
           .catch(err => console.log(err))
         case 'put':
@@ -85,7 +83,6 @@ class ExamForm extends React.Component {
             .then(res => {
               console.log(res)
               alert("the test you have created has been saved")
-              //window.location = '/feedbackstage/' + moduleID + '/' + this.props.userID
             })
             .catch(err => console.log(err))
         default:
@@ -134,5 +131,4 @@ class ExamForm extends React.Component {
     );
   }
 }
-
 export default ExamForm

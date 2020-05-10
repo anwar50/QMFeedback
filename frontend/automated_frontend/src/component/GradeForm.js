@@ -1,10 +1,7 @@
-import { Form, Input, Button, Row, Col, Select, message, Card, Statistic} from 'antd';
+import { Form, Input, Button, Row, Col, message, Card, Statistic} from 'antd';
 import React from "react"
 import axios from "axios";
 import GradeMark from "./GeneralInput"
-import {Link} from "react-router-dom";
-const {Option} = Select;
-
 class GradeForm extends React.Component {
   constructor(props){
     super(props);
@@ -42,14 +39,6 @@ class GradeForm extends React.Component {
   }
   componentDidMount()
     {
-        // const moduleID = this.props.moduleID;
-        // axios.get(`http://127.0.0.1:8000/api/module/${moduleID}`)
-        // .then(res => {
-        //     this.setState({
-        //         module: res.data
-        //     })
-        //     console.log(res.data)
-        // })
         const TESTID = this.props.testID
         axios.get(`http://127.0.0.1:8000/api/test/${TESTID.id}`)
         .then(res => {
@@ -69,11 +58,8 @@ class GradeForm extends React.Component {
       let effectiveness = "";
       const total = this.state.totalMark;
       const total_sub = this.state.totalSub;
-      //const weakest = e.target.elements.weakest.value;
       const final_mark = parseInt((total_sub/total)*100)
-
       //calculate the weakest topic!
-      
       let lowest = this.state.marksForTopics;
       let lowestIndex = 0;
       const minimum_mark = Math.min(...lowest)
@@ -171,16 +157,9 @@ class GradeForm extends React.Component {
                   showingAlert: false,
                 });
             }, 5000);
-              //redirect to home page after creating
-            //window.location = '/Grade'
           })
           .catch(err => console.log(err))
         case 'put':
-            // axios.put(`http://127.0.0.1:8000/api/module/${moduleID}/update/`, {
-              
-            // })
-            // .then(res => console.log(res))
-            // .catch(err => console.log(err))
             return null
       }
   }
@@ -277,14 +256,6 @@ class GradeForm extends React.Component {
                 </Form.Item>
               </Col>
             </Row>
-            {/* <Form.Item label="Weakest topic"> 
-              <Select ref={ref => {
-                          this._select = ref }} labelInValue defaultValue={this.state.value} style={{width: 120}} onChange={this.handleChange}>
-                    {list_topics.map(options =>(
-                        <Option value="topic"  value={options}>{options}</Option>
-                    ))}            
-              </Select> 
-            </Form.Item> */}
           <Form.Item>
             <Button type="primary" htmlType="submit">Add information</Button>
             </Form.Item>
@@ -376,37 +347,4 @@ class GradeForm extends React.Component {
     );
   }
 }
-
 export default GradeForm
-
-
-
-
-
-{/* <Form onSubmit={(event) => this.handleTotalSubmit(event, this.props.requestMethod, this.props.testID)}>
-            <div>
-                <strong>All of your topics were saved! Now add more information</strong>
-            </div>
-            <Row gutter={20}>
-              <Col span={8}>
-                <Form.Item label="Total mark for all questions">
-                  <Input type="number" name="total_mark" pattern="[0-9]*" onKey Press={this.onKeyPress.bind(this)} />
-                </Form.Item>
-                <Form.Item label="Total mark given to students for sub questions">
-                    <Input type="number" name="total_sub" pattern="[0-9]*" onKey Press={this.onKeyPress.bind(this)} />
-                </Form.Item>
-              </Col>
-            </Row>
-             <Form.Item label="Weakest topic"> 
-              <Select ref={ref => {
-                          this._select = ref }} labelInValue defaultValue={this.state.value} style={{width: 120}} onChange={this.handleChange}>
-                    {list_topics.map(options =>(
-                        <Option value="topic"  value={options}>{options}</Option>
-                    ))}            
-              </Select> 
-            </Form.Item> 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
-            </Form.Item>
-          </Form> 
-                    */}
