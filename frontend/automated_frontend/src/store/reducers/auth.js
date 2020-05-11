@@ -3,6 +3,7 @@ import { update } from '../utility';
 const initialState = {
     token: null,
     username: null,
+    signup: null,
     error: null, 
     loading: false
 }
@@ -17,6 +18,7 @@ const authSuccess = (state, action) => {
     return update(state, {
         token: action.token,
         username: action.username,
+        signup: action.signup,
         error: null,
         loading: false
     });

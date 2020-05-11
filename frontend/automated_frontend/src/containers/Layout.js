@@ -30,6 +30,10 @@ class CustomLayout extends React.Component {
                 console.log(this.state.profile)
                 
         }))
+        // if(this.props.signup == true)
+        // {
+        //     this.props.history.push('/login');  
+        // }
     }
     logout = () => {
         this.props.isAuthenticated = false;
@@ -43,7 +47,7 @@ class CustomLayout extends React.Component {
         let profile_picture = ""
         let department = ""
         let role = ""
-        console.log(id)
+        console.log(this.props.signup)
         tempUsers.map(function(item, i){
             if(item.username == id)
             {
@@ -119,7 +123,7 @@ class CustomLayout extends React.Component {
                 </Menu.Item>
                 <Menu.Item key="37">
                     <Link to="/contact">Contact Us</Link>
-                </Menu.Item>
+                </Menu.Item> 
                 <Menu.Item key="8">
                     <Link to="/FAQ">FAQ</Link>
                 </Menu.Item>

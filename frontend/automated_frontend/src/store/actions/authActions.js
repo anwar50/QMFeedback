@@ -1,17 +1,17 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
-
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
     }
 }
-export const authSuccess = (token, username) => {
+export const authSuccess = (token, username, signup) => {
     console.log(username)
     return {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
-        username: username
+        username: username,
+        signup: signup
     }
 }
 export const authFail = error => {
@@ -57,7 +57,6 @@ export const authLogin = (username, password) => {
     }
 }
 export const authProfile = (type, username, avatar) => {
-    console.log("fd")
     let user_data = []
     axios.get(`http://127.0.0.1:8000/api/users`)
         .then(res => {
@@ -73,6 +72,7 @@ export const authProfile = (type, username, avatar) => {
                     })
                     .then(res => {
                         console.log(res)
+                        window.location = '/login';
                     })
                     .catch(err => {
                         console.log(err)
@@ -81,7 +81,6 @@ export const authProfile = (type, username, avatar) => {
             })
             console.log(user_data)
         })
-        window.location = '/login';
 }
 export const authSignup = (username, email, password1, password2, avatar) => {
     return dispatch => {
@@ -98,10 +97,11 @@ export const authSignup = (username, email, password1, password2, avatar) => {
         })
         .then(res => {
             const token = res.data.key;
+            const signup = "true"
             const expirationDate = new Date(new Date().getTime() + 3600 * 10000);
             localStorage.setItem('token', token);
             localStorage.setItem('expirationDate', expirationDate);
-            dispatch(authSuccess(token));
+            dispatch(authSuccess(token, signup));
             dispatch(checkAuthTimeout(3600));
             teacher = 'Teacher'
             dispatch(authProfile(teacher, username, avatar.props.src))
