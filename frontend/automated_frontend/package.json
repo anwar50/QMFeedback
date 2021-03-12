@@ -12,7 +12,7 @@
     "axios": "^0.19.2",
     "bizcharts": "^3.5.8",
     "file-saver": "^2.0.2",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "pdfmake": "^0.1.65",
     "react": "^16.13.1",
     "react-csv": "^1.1.2",
